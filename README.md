@@ -1,6 +1,6 @@
 # TextRenderer
 
-A modular utility to render text onto a bitmap image.
+A modular utility for rendering text as a bitmap image.
 
 ## Dependencies
 
