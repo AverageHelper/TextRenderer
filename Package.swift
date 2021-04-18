@@ -7,17 +7,19 @@ let package = Package(
 	products: [
 		.executable(
 			name: "TextRenderer",
-			targets: ["TextRenderer"]),
+			targets: ["TextRenderer"])
 	],
 	dependencies: [
 		.package(
-			url: "https://github.com/realm/SwiftLint.git",
-			.upToNextMinor(from: "0.43.1")),
+			url: "https://github.com/apple/swift-argument-parser",
+			from: "0.4.0")
 	],
 	targets: [
 		.target(
 			name: "TextRenderer",
-			dependencies: []),
+			dependencies: [
+				.product(name: "ArgumentParser", package: "swift-argument-parser")
+			]),
 		.testTarget(
 			name: "TextRendererTests",
 			dependencies: ["TextRenderer"]),

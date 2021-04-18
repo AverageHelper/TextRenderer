@@ -1,3 +1,6 @@
 {
-  "swiftlint.onlyEnableOnSwiftPMProjects": true
+  "apple-swift-format.onlyEnableOnSwiftPMProjects": true,
+  "apple-swift-format.configSearchPaths": [
+    ".swift-format.json"
+  ]
 }
