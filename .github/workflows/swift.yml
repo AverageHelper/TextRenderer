@@ -62,6 +62,7 @@ jobs:
           cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/SDKs/Windows.sdk/usr/bin /c/Library/Swift/Current/bin
           cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/Library/XCTest-development/usr/bin/* /c/Library/Swift/Current/bin
           export PATH="/c/Library/Swift/Current/bin:${PATH}"
+          echo "::set-env name=PATH::$PATH"
           swift --version
 
           # echo 'Fetching ICU...'
