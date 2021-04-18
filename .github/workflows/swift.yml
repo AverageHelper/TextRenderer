@@ -25,9 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Use Visual Studio Command Prompt
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: ilammy/msvc-dev-cmd@v1.7.0
+
       - name: Install Swift
         if: ${{ matrix.os == 'windows-latest' }}
-        uses: microsoft/setup-msbuild@v1
         run: |
           copy %SDKROOT%\usr\share\ucrt.modulemap "%UniversalCRTSdkDir%\Include\%UCRTVersion%\ucrt\module.modulemap"
           copy %SDKROOT%\usr\share\visualc.modulemap "%VCToolsInstallDir%\include\module.modulemap"
