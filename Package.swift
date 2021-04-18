@@ -6,8 +6,11 @@ let package = Package(
 	name: "TextRenderer",
 	products: [
 		.executable(
+			name: "text-renderer",
+			targets: ["text-renderer"]),
+		.library(
 			name: "TextRenderer",
-			targets: ["TextRenderer"])
+			targets: ["TextRenderer"]),
 	],
 	dependencies: [
 		.package(
@@ -16,12 +19,18 @@ let package = Package(
 	],
 	targets: [
 		.target(
-			name: "TextRenderer",
+			name: "text-renderer",
 			dependencies: [
-				.product(name: "ArgumentParser", package: "swift-argument-parser")
+				.target(name: "TextRenderer"),
+				.product(name: "ArgumentParser", package: "swift-argument-parser"),
 			]),
+		.target(
+			name: "TextRenderer",
+			dependencies: []),
 		.testTarget(
 			name: "TextRendererTests",
-			dependencies: ["TextRenderer"]),
+			dependencies: [
+				.target(name: "TextRenderer")
+			]),
 	]
 )

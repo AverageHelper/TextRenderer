@@ -1,4 +1,5 @@
 import ArgumentParser
+import TextRenderer
 
 internal struct TextRendererMain: ParsableCommand {
 	static var configuration: CommandConfiguration {
@@ -10,7 +11,7 @@ internal struct TextRendererMain: ParsableCommand {
 
 	func run() throws {
 		let renderer = TextRenderer()
-		renderer.render(phrase)
+		renderer.print(phrase)
 	}
 }
 
