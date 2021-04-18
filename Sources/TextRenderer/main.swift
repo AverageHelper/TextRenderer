@@ -1,8 +1,16 @@
 import ArgumentParser
 
-struct TextRendererMain: ParsableCommand {
+internal struct TextRendererMain: ParsableCommand {
+	static var configuration: CommandConfiguration {
+		.init(commandName: "text-renderer")
+	}
+
+	@Argument(help: "The phrase to say.")
+	var phrase: String
+
 	func run() throws {
-		print("Hello, world")
+		let renderer = TextRenderer()
+		renderer.render(phrase)
 	}
 }
 

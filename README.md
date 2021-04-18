@@ -2,6 +2,14 @@
 
 A modular utility for rendering text as a bitmap image.
 
+## Run
+
+This utility can run in the command line.
+
+```sh
+$ swift run TextRenderer
+```
+
 ## Development Dependencies
 
 - [Mint](https://github.com/yonaskolb/Mint)
