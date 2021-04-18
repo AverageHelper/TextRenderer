@@ -67,7 +67,8 @@ jobs:
           echo 'Fetching ICU...'
           mkdir -p .build/SDG/ICU
           cd .build/SDG/ICU
-          curl -L http://download.icu-project.org/files/icu4c/64.2/icu4c-64_2-Win64-MSVC2017.zip --output ICU.zip
+          # curl -L http://download.icu-project.org/files/icu4c/64.2/icu4c-64_2-Win64-MSVC2017.zip --output ICU.zip
+          curl -L https://github.com/unicode-org/icu/releases/download/release-64-2/icu4c-64_2-Win64-MSVC2017.zip --output ICU.zip
           7z x ICU.zip -oICU-64.2
           mv ICU-64.2 /c/Library/ICU-64.2
           mv /c/Library/ICU-64.2/bin64 /c/Library/ICU-64.2/bin
