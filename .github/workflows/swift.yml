@@ -19,8 +19,8 @@ jobs:
 
           - windows-latest
 
-          - macOS-latest
-          - macos-11.0
+          - macos-latest
+          # - macos-11.0  # add this when it's supported
 
     steps:
       - uses: actions/checkout@v2
