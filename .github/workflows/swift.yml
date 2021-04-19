@@ -24,11 +24,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: actions/cache@v1
-      with:
-        key: Windows‐${{ hashFiles('Refresh*') }}‐${{ hashFiles('.github/workflows/**') }}
-        path: .build/SDG/TextRenderer
+        with:
+          key: Windows‐${{ hashFiles('Refresh*') }}‐${{ hashFiles('.github/workflows/**') }}
+          path: .build/SDG/TextRenderer
 
       - name: Install Swift
         if: ${{ matrix.os == 'windows-latest' }}
