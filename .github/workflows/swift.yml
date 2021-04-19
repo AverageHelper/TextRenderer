@@ -30,7 +30,7 @@ jobs:
           key: Windows‐${{ hashFiles('Refresh*') }}‐${{ hashFiles('.github/workflows/**') }}
           path: .build/SDG/TextRenderer
 
-      - name: Install Swift
+      - name: Install Swift, Buld, Test
         if: ${{ matrix.os == 'windows-latest' }}
         shell: bash
         run: |
@@ -67,7 +67,7 @@ jobs:
           cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/SDKs/Windows.sdk/usr/bin /c/Library/Swift/Current/bin
           cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/Library/XCTest-development/usr/bin/* /c/Library/Swift/Current/bin
           export PATH="/c/Library/Swift/Current/bin:${PATH}"
-          echo "::set-env name=PATH::$PATH"
+          # echo "::set-env name=PATH::$PATH"
           swift --version
 
           # echo 'Fetching ICU...'
@@ -87,19 +87,23 @@ jobs:
           # git clone https://github.com/apple/swift-llbuild.git .build/SDG/Dependencies/llbuild --branch 0.2.0 --depth 1 --config advice.detachedHead=false
           # git clone https://github.com/SDGGiesbrecht/swift-format .build/SDG/Dependencies/swift-format --branch 0.0.50100 --depth 1 --config advice.detachedHead=false
 
-          # echo 'Building Workspace...'
+          echo 'Building TextRenderer...'
+          swift build -v
           # mkdir .github/workflows/Windows
           # cmake -G Ninja -S .github/workflows/Windows -B .build/SDG/CMake -DCMAKE_Swift_FLAGS='-resource-dir C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift -L C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift\windows -I C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows\x86_64 -L C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows' -DCMAKE_Swift_LINK_FLAGS='-resource-dir C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift -L C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift\windows -I C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows\x86_64 -L C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows'
           # cmake --build '.build/SDG/CMake'
 
-          # echo 'Testing Workspace...'
+          echo 'Testing TextRenderer...'
+          swift test -v
           # cd .build/SDG/CMake
           # ctest --verbose
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true # so we can use set-env
+        # env:
+        #   ACTIONS_ALLOW_UNSECURE_COMMANDS: true # so we can use set-env
 
       - name: Build
+        if: ${{ matrix.os != 'windows-latest' }}
         run: swift build -v
 
       - name: Run tests
+        if: ${{ matrix.os != 'windows-latest' }}
         run: swift test -v
