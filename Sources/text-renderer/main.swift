@@ -1,7 +1,7 @@
 import ArgumentParser
 import TextRenderer
 
-internal struct TextRendererMain: ParsableCommand {
+struct TextRendererMain: ParsableCommand {
 	static var configuration: CommandConfiguration {
 		.init(commandName: "text-renderer")
 	}
