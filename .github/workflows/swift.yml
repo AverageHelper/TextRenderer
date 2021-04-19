@@ -25,23 +25,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: seanmiddleditch/gha-setup-vsdevenv@master
-
-      - name: Install swift-DEVELOPMENT-SNAPSHOT-2021-02-18-a
+      - name: (Windows) Run seanmiddleditch/gha-setup-vsdevenv@master
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+      - name: (Windows) Install swift-DEVELOPMENT-SNAPSHOT-2021-02-18-a
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           Install-Binary -Url "https://swift.org/builds/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2021-02-18-a/swift-DEVELOPMENT-SNAPSHOT-2021-02-18-a-windows10.exe" -Name "installer.exe" -ArgumentList ("-q")
-      - name: Set Environment Variables
+      - name: (Windows) Set Environment Variables
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           echo "SDKROOT=C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           echo "DEVELOPER_DIR=C:\Library\Developer" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-      - name: Adjust Paths
+      - name: (Windows) Adjust Paths
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           echo "C:\Library\Swift-development\bin;C:\Library\icu-67\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "C:\Library\Developer\Toolchains\unknown-Asserts-development.xctoolchain\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - name: Install Supporting Files
+      - name: (Windows) Install Supporting Files
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           Copy-Item "$env:SDKROOT\usr\share\ucrt.modulemap" -destination "$env:UniversalCRTSdkDir\Include\$env:UCRTVersion\ucrt\module.modulemap"
@@ -49,85 +50,8 @@ jobs:
           Copy-Item "$env:SDKROOT\usr\share\visualc.apinotes" -destination "$env:VCToolsInstallDir\include\visualc.apinotes"
           Copy-Item "$env:SDKROOT\usr\share\winsdk.modulemap" -destination "$env:UniversalCRTSdkDir\Include\$env:UCRTVersion\um\module.modulemap"
 
-      # - uses: actions/cache@v1
-      #   with:
-      #     key: Windows‐${{ hashFiles('Refresh*') }}‐${{ hashFiles('.github/workflows/**') }}
-      #     path: .build/SDG/TextRenderer
-
-      # - name: Install Swift, Buld, Test
-      #   if: ${{ matrix.os == 'windows-latest' }}
-      #   shell: bash
-      #   run: |
-      #     echo 'Setting up Visual Studio... (in order to proceed as though in the Native Tools Command Prompt)'
-      #     repository_directory=$(pwd)
-      #     cd '/c/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build'
-      #     echo 'export -p > exported_environment.sh' > nested_bash.sh
-      #     echo 'vcvarsall.bat x64 && "C:/Program Files/Git/usr/bin/bash" -c ./nested_bash.sh' > export_environment.bat
-      #     cmd "/c export_environment.bat"
-      #     source ./exported_environment.sh
-      #     if [ -z "$INCLUDE" ]; then echo 'Failed to set up Visual Studio.'; exit 1; fi
-      #     cd "${repository_directory}"
-
-      #     echo 'Fetching Windows platform module maps...'
-      #     curl -L 'https://raw.githubusercontent.com/apple/swift/swift-5.2-branch/stdlib/public/Platform/ucrt.modulemap' -o "${UniversalCRTSdkDir}/Include/${UCRTVersion}/ucrt/module.modulemap"
-      #     curl -L 'https://raw.githubusercontent.com/apple/swift/swift-5.2-branch/stdlib/public/Platform/visualc.modulemap' -o "${VCToolsInstallDir}/include/module.modulemap"
-      #     curl -L 'https://raw.githubusercontent.com/apple/swift/swift-5.2-branch/stdlib/public/Platform/visualc.apinotes' -o "${VCToolsInstallDir}/include/visualc.apinotes"
-      #     curl -L 'https://raw.githubusercontent.com/apple/swift/swift-5.2-branch/stdlib/public/Platform/winsdk.modulemap' -o "${UniversalCRTSdkDir}/Include/${UCRTVersion}/um/module.modulemap"
-
-      #     echo 'Fetching Swift...'
-      #     mkdir -p .build/SDG/Experimental_Swift
-      #     cd .build/SDG/Experimental_Swift
-      #     curl -o swift-build.py 'https://raw.githubusercontent.com/compnerd/swift-build/master/utilities/swift-build.py'
-      #     python -m pip install --user azure-devops tabulate
-      #     echo 'Downloading... (This could take up to 10 minutes.)'
-      #     python swift-build.py --build-id 'VS2019 Swift 5.2' --latest-artifacts --filter windows-x64 --download > /dev/null
-      #     7z x toolchain-windows-x64.zip
-      #     mv toolchain-windows-x64/Library /c/Library
-      #     7z x sdk-windows-x64.zip
-      #     mv sdk-windows-x64/Library/Developer/Platforms /c/Library/Developer/Platforms
-      #     cd "${repository_directory}"
-      #     export PATH="/c/Library/Developer/Toolchains/unknown-Asserts-development.xctoolchain/usr/bin:${PATH}"
-      #     mkdir -p /c/Library/Swift/Current
-      #     cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/SDKs/Windows.sdk/usr/bin /c/Library/Swift/Current/bin
-      #     cp -R /c/Library/Developer/Platforms/Windows.platform/Developer/Library/XCTest-development/usr/bin/* /c/Library/Swift/Current/bin
-      #     export PATH="/c/Library/Swift/Current/bin:${PATH}"
-      #     # echo "::set-env name=PATH::$PATH"
-      #     swift --version
-
-      #     # echo 'Fetching ICU...'
-      #     # mkdir -p .build/SDG/ICU
-      #     # cd .build/SDG/ICU
-      #     # # curl -L http://download.icu-project.org/files/icu4c/64.2/icu4c-64_2-Win64-MSVC2017.zip --output ICU.zip
-      #     # curl -L https://github.com/unicode-org/icu/releases/download/release-64-2/icu4c-64_2-Win64-MSVC2017.zip --output ICU.zip
-      #     # 7z x ICU.zip -oICU-64.2
-      #     # mv ICU-64.2 /c/Library/ICU-64.2
-      #     # mv /c/Library/ICU-64.2/bin64 /c/Library/ICU-64.2/bin
-      #     # export PATH="/c/Library/ICU-64.2/bin:${PATH}"
-      #     # cd "${repository_directory}"
-
-      #     # echo 'Fetching package graph...'
-      #     # git clone https://github.com/apple/swift-package-manager.git .build/SDG/Dependencies/SwiftPM --branch 0.5.0 --depth 1 --config advice.detachedHead=false
-      #     # git clone https://github.com/apple/swift-syntax .build/SDG/Dependencies/SwiftSyntax --branch 0.50100.0 --depth 1 --config advice.detachedHead=false
-      #     # git clone https://github.com/apple/swift-llbuild.git .build/SDG/Dependencies/llbuild --branch 0.2.0 --depth 1 --config advice.detachedHead=false
-      #     # git clone https://github.com/SDGGiesbrecht/swift-format .build/SDG/Dependencies/swift-format --branch 0.0.50100 --depth 1 --config advice.detachedHead=false
-
-      #     echo 'Building TextRenderer...'
-      #     swift build -v
-      #     # mkdir .github/workflows/Windows
-      #     # cmake -G Ninja -S .github/workflows/Windows -B .build/SDG/CMake -DCMAKE_Swift_FLAGS='-resource-dir C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift -L C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift\windows -I C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows\x86_64 -L C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows' -DCMAKE_Swift_LINK_FLAGS='-resource-dir C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift -L C:\Library\Developer\Platforms\Windows.platform\Developer\SDKs\Windows.sdk\usr\lib\swift\windows -I C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows\x86_64 -L C:\Library\Developer\Platforms\Windows.platform\Developer\Library\XCTest-development\usr\lib\swift\windows'
-      #     # cmake --build '.build/SDG/CMake'
-
-      #     echo 'Testing TextRenderer...'
-      #     swift test -v
-      #     # cd .build/SDG/CMake
-      #     # ctest --verbose
-      #   # env:
-      #   #   ACTIONS_ALLOW_UNSECURE_COMMANDS: true # so we can use set-env
-
       - name: Build
-        # if: ${{ matrix.os != 'windows-latest' }}
         run: swift build -v
 
       - name: Run tests
-        # if: ${{ matrix.os != 'windows-latest' }}
         run: swift test -v
